@@ -10,6 +10,9 @@ enables easy adjustment through my window manager.
 By using the program, you agree that the author is not responsible for any damage caused
 from misconfiguring the program.  
 
+## Technology used
+C, Linux
+
 ## Build instructions:
 
 Locate the file that contains the brightness level, probably somewhere in /sys/,
@@ -28,4 +31,6 @@ This may not work on all systems and is provided here as a convenience without w
 
     # backlight -
 
+## What I learned
 
+How to interface with the kernel using files in /sys to alter screen brightness settings (and other things)
