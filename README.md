@@ -31,6 +31,8 @@ This may not work on all systems and is provided here as a convenience without w
 
     # backlight -
 
+I have these bound to hotkeys in dwm, which works quite well.  I've (probably against security best practices) setup passwordless sudo on the backlight command to allow for convenient invocation.  I suspect similar behaviour could be achieved in other window managers as well.
+
 ## What I learned
 
 How to interface with the kernel using files in /sys to alter screen brightness settings (and other things)
