@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
 const char filename[] = "/sys/class/backlight/intel_backlight/brightness";
 
@@ -14,11 +15,14 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	// get current value
+    int brightness_value;
+    char *p;
+	
+    // get current value
 	FILE * pFile;
-	int brightness_value;
 	pFile = fopen (filename, "r");
-	if (pFile != NULL) {
+	
+    if (pFile != NULL) {
 		fscanf(pFile, "%d", &brightness_value);
 		fclose(pFile);
 	} else {
@@ -39,8 +43,24 @@ int main(int argc, char *argv[]) {
 			else if (brightness_value > MIN) 
 				brightness_value -= SMALLSTEP;
 			break;
+        case 's':
+            if (argc < 3) {
+                printf("Argument s requires a number between %d and %d as an argument.\n");
+                exit(2);
+            }
+
+            int value = (int)strtol(argv[2], &p, 10);
+            
+            if (errno != 0 || *p != '\0' || value > MAX || value < MIN) {
+                printf("Argument s requires a number between %d and %d as an argument.\n");
+                exit(2);
+            }
+                brightness_value = value;
+            printf("%d\n", value);
+            break;
 		default:
-			printf("Invalid argument passed.  Use + or -\n"); 
+			printf("Invalid argument passed.  Use +, -, or s n where %d <= n <= %d\n.", MIN, MAX); 
+            exit(0);
 	}
 
 	// write new value
