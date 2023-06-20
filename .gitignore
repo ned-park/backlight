@@ -1,3 +1,4 @@
 backlight
+config.h
 *.o
 

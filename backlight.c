@@ -2,17 +2,19 @@
 #include <stdlib.h>
 #include <errno.h>
 
-const char filename[] = "/sys/class/backlight/intel_backlight/brightness";
+#include "config.h"
 
-const int MIN = 0;
-const int MAX = 1060;
-const int BIGSTEP = 5;
-const int SMALLSTEP = 1;
+void print_usage() {
+	printf("Usage:\n\tbacklight +\n\tbacklight -\n");
+    printf("\tbacklight s int\nwhere %d <= int <= %d\n\n", min, max);
+    printf("See the man page backlight(1) for details on exit codes.\n");
+}
 
 int main(int argc, char *argv[]) {
 
 	if (argc < 2) {
-		exit(1);
+        print_usage();
+		exit(2);
 	}
 
     int brightness_value;
@@ -32,41 +34,39 @@ int main(int argc, char *argv[]) {
 	// find new value
 	switch (*argv[1]) {
 		case '+':
-			if(brightness_value <= MAX - 10*SMALLSTEP && brightness_value > 9*SMALLSTEP)
-				brightness_value += BIGSTEP;
-			else if (brightness_value < MAX)
-				brightness_value += SMALLSTEP;
+			if(brightness_value <= max - 10*smallstep && brightness_value > 9*smallstep)
+				brightness_value += bigstep;
+			else if (brightness_value < max)
+				brightness_value += smallstep;
 			break;
 		case '-':
-			if(brightness_value >=  15*SMALLSTEP)
-				brightness_value -= BIGSTEP;
-			else if (brightness_value > MIN) 
-				brightness_value -= SMALLSTEP;
+			if(brightness_value >=  15*smallstep)
+				brightness_value -= bigstep;
+			else if (brightness_value > min) 
+				brightness_value -= smallstep;
 			break;
         case 's':
             if (argc < 3) {
-                printf("Argument s requires a number between %d and %d as an argument.\n");
+                print_usage();
                 exit(2);
             }
 
             int value = (int)strtol(argv[2], &p, 10);
             
-            if (errno != 0 || *p != '\0' || value > MAX || value < MIN) {
-                printf("Argument s requires a number between %d and %d as an argument.\n");
+            if (errno != 0 || *p != '\0' || value > max || value < min) {
+                print_usage();
                 exit(2);
             }
                 brightness_value = value;
-            printf("%d\n", value);
             break;
 		default:
-			printf("Invalid argument passed.  Use +, -, or s n where %d <= n <= %d\n.", MIN, MAX); 
-            exit(0);
+            print_usage();
+            exit(2);
 	}
 
 	// write new value
 	pFile = fopen(filename, "w");
 	if (pFile == NULL) {
-		printf("Error opening file\n");
 		exit(1);
 	}
 
