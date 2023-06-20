@@ -1,0 +1,58 @@
+.TH BACKLIGHT 1 backlight
+.SH NAME
+backlight \- simple backlight control
+.SH SYNOPSIS
+.B backlight
+.RB [OPTION]\ <int>
+.SH Description
+
+Backlight is a simple backlight control for changing laptop brightness.  Since
+the way it does that changes from system to system, getting it work usually
+involves copying config.def.h to config.h and then updating the constants it 
+contains to use the appropriate filename, min, max, and step sizes for the 
+system and your preferences.  
+
+Generally, /sys/class/backlight isn't a bad place to start looking for the
+appropriate file.  Once configured, it needs to be run with root permissions to
+modify the appropriate files.  Like most software, backlight comes without any
+warranty and is used at theuser's own risk.  
+
+.SH OPTIONS
+.B \+ 
+Increase the brightness
+
+.B \- 
+Decrease the brightness
+
+.B s <int> 
+Set the brightness to a particular value between MIN and MAX values as defined
+in the source.
+
+.SH Usage
+backlight can be invoked through the shell which may be useful for testing or
+setting a particular value with the s <int> option.  Generally, backlight is 
+most useful when bound to hotkeys to increase or decrease brightness as one
+expects such keys to behave.  
+
+.SH Examples
+backlight
+
+# backlight +
+
+sudo backlight -
+
+sudo backlight s 50
+
+.SH Exit Codes
+0 Success
+
+1 Failed to open file for reading or writing.  It may be that the file does
+not exist, or that the program has insufficient privileges to open the file
+for reading or writing.  
+
+2 Incorrect arguments, see Examples or run program without arguments to get
+the usage information.  
+
+.SH Report Bugs
+Bug reports can be created at https://github.com/ned-park/backlight
+
